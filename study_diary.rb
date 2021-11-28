@@ -9,7 +9,7 @@ def menu_inicial()
     while escolha != 0 do
         clear_screen
         puts "Diario de estudos"
-        puts "[1] Cadastrar uma tarefa para estudar \n[2] Alterar status da tarefa \n[3] Ver tarefas cadastradas \n[4] Buscar uma tarefa de estudo \n[5] Deletar tarefas \n[6] Salvar dados das tarefas \n[0] Sair \nEscolha uma opção:"
+        puts "[1] Cadastrar uma tarefa para estudar \n[2] Alterar status da tarefa \n[3] Ver tarefas cadastradas \n[4] Deletar tarefas \n[5] Salvar dados das tarefas \n[0] Sair \nEscolha uma opção:"
         escolha = gets.to_i 
         case escolha
         when 1
@@ -19,10 +19,8 @@ def menu_inicial()
         when 3
             ver_tarefas()
         when 4
-            buscar_tarefas()
-        when 5
             deletar_tarefas()
-        when 6
+        when 5
             salvar_dados()
         when 0
             puts "Obrigado por usar Diario de estudos."
@@ -43,13 +41,15 @@ def cadastrar_tarefas()
         $categorias.each_with_index{|valor,index|valor.mostrar_categoria(index)}
         categoria_escolha = gets.to_i
         if categoria_escolha >= 0 && categoria_escolha < $categorias.length
-            categoria = $categorias[categoria_escolha].categoria
+            categoria = $categorias[categoria_escolha]
         else
             puts "Erro! Favor digite uma categoria valida." 
         end
+        puts "Digite a descrição da tarefa"
+        descricao = gets.chomp
     end
-    $itens_estudo << StudyItem.new(titulo: titulo, categoria: categoria)
-    puts "Estudo cadastrado com sucesso. Pressione qualquer tecla para continuar."
+    $itens_estudo << StudyItem.new(titulo: titulo, categoria: categoria, descricao: descricao)
+    puts "Estudo cadastrado com sucesso. \nPressione qualquer tecla para continuar."
     gets
 end
 
@@ -75,39 +75,62 @@ def ver_tarefas()
         puts "Desculpe, não encontramos itens cadastrados."
         puts "Pressione qualquer tecla para continuar."
     else
-        puts "Escolha a opção desejada: \n[1]Busca por categoria \n[2]Busca por status da tarefa"
+        puts "Escolha a opção desejada: \n[1]Ver todas as tarefas \n[2]Busca por categoria \n[3]Busca por status da tarefa \n[4]Buscar por titulo \n[6]Buscar por descrição \n[0]Voltar"
         escolha = gets.to_i
         case escolha
         when 1
-            ver_tarefas_categoria
+            ver_todas_tarefas()
         when 2
-            ver_tarefas_status
+            ver_tarefas_categoria()
+        when 3
+            ver_tarefas_status()
+        when 4
+            buscar_tarefas_nome()
+        when 5
+            buscar_tarefas_descricao()
+        when 0
+            puts "Voltando a tela inicial."
         else
+            puts "Erro! Escolha não encontrada."
         end
     end
     gets
 end
 
+def ver_todas_tarefas()
+    $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+    puts "Pressione qualquer tecla para continuar."
+end
+
 # Procedimento Ver tarefas por Categoria
 def ver_tarefas_categoria()
-
+    busca = ""
+    while busca == "" do
+        puts "Escolha qual a categoria desejada: "
+        $categorias.each_with_index{|valor,index|valor.mostrar_categoria(index)}
+        categoria_escolha = gets.to_i
+        if categoria_escolha >= 0 && categoria_escolha < $categorias.length()
+            busca = $categorias[categoria_escolha].categoria
+        else
+            puts "Erro! Favor digite uma categoria valida." 
+        end
+    end
+    $itens_estudo.each_with_index{|item,index|item.buscar_itens_categoria(busca,index)}
+    puts "Pressione qualquer tecla para continuar."
 end
 
 # Procedimento Ver tarefas por Status
 def ver_tarefas_status()
-    item_desejado = 0
-    while item_desejado != 1 && item_desejado != 2 && item_desejado != 3 do
-        puts "Escolha uma opção abaixo: \n[1]Ver itens a fazer \n[2]Ver itens concluidos \n[3]Ver todos os itens"
-        item_desejado = gets.to_i
-        case item_desejado
+    busca = 0
+    while busca != 1 && busca != 2 do
+        puts "Escolha uma opção abaixo: \n[1]Ver itens a fazer \n[2]Ver itens concluidos"
+        busca = gets.to_i
+        case busca
         when 1
             $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "A fazer"}
             puts "Pressione qualquer tecla para continuar."
         when 2
             $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "Concluido"}
-            puts "Pressione qualquer tecla para continuar."
-        when 3
-            $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
             puts "Pressione qualquer tecla para continuar."
         else
             puts "Erro! Favor digite um tipo valido." 
@@ -116,13 +139,21 @@ def ver_tarefas_status()
 end
 
 # Procedimento Buscar tarefas de estudo
-def buscar_tarefas()
-    puts "Digite uma palavra para procurar:"
+def buscar_tarefas_nome()
+    puts "Digite uma palavra para procurar no nome:"
     busca = gets.chomp().downcase  
     puts "Os resultados encontrados foram:"
-    $itens_estudo.each_with_index{|item,index|item.buscar_itens(busca,index)}
+    $itens_estudo.each_with_index{|item,index|item.buscar_itens_titulo(busca,index)}
     puts "Pressione qualquer tecla para continuar."
-    gets
+end
+
+# Procedimento Buscar tarefas de estudo
+def buscar_tarefas_descricao()
+    puts "Digite uma palavra para procurar na descrição:"
+    busca = gets.chomp().downcase  
+    puts "Os resultados encontrados foram:"
+    $itens_estudo.each_with_index{|item,index|item.buscar_itens_descricao(busca,index)}
+    puts "Pressione qualquer tecla para continuar."
 end
 
 # Procedimento Deletar tarefas
@@ -131,8 +162,9 @@ def deletar_tarefas()
         puts "Desculpe, não encontramos itens cadastrados."
         puts "Pressione qualquer tecla para continuar."
     else
-        puts "Digite o item que deseja deletar:"
+        puts "Tarefas encontradas:"
         $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+        puts "Digite o item que deseja deletar:"
         escolha = gets.to_i
         if escolha >= 0 && escolha < $itens_estudo.length()
             $itens_estudo.delete_at(escolha)
