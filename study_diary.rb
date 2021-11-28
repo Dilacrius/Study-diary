@@ -1,5 +1,4 @@
 # Diario de Estudo em Ruby
-# study_diary.rb
 require './study_item.rb'
 $itens_estudo = []
 
@@ -69,7 +68,6 @@ end
 def buscar_itens
     puts "Digite uma palavra para procurar:"
     busca = gets.chomp().downcase  
-    puts busca
     puts "Os resultados encontrados foram:"
     $itens_estudo.each{|item|item.buscar_itens(busca)}
     puts "Pressione qualquer tecla para continuar"

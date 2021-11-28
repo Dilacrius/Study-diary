@@ -12,9 +12,7 @@ class StudyItem
     end
 
     def buscar_itens(busca)
-        puts @titulo
-        puts busca
-        if @titulo.include? "busca"
+        if @titulo.include? busca
             mostrar_itens
         end
     end
