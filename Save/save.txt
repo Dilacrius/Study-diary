@@ -1,0 +1,1 @@
+[#<StudyItem:0x0000562656784970 @titulo="22", @categoria=#<Category:0x0000562656784920 @categoria="Ruby">>]

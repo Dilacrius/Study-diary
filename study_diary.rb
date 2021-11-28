@@ -1,24 +1,29 @@
 # Diario de Estudo em Ruby
 require './study_item.rb'
-$itens_estudo = []
+require './save_load.rb'
 
 # Procedimento Menu
 def menu_inicial
-    escolha = 0
-    while escolha != 4 do
+    escolha = ""
+    while escolha != 0 do
         clear_screen
         puts "Diario de estudos"
-        puts "[1] Cadastrar um item para estudar \n[2] Ver todos os itens cadastrados \n[3] Buscar um item de estudo \n[4] Sair \nEscolha uma opção:"
+        puts "[1] Cadastrar uma tarefa para estudar \n[2] Alterar status da tarefa \n[3] Ver tarefas cadastradas \n[4] Buscar uma tarefa de estudo \n[5] Deletar tarefas \n[6] Salvar dados das tarefas \n[0] Sair \nEscolha uma opção:"
         escolha = gets.to_i 
-
         case escolha
         when 1
-            cadastrar_item
+            cadastrar_tarefas
         when 2
-            ver_itens
+            alterar_tarefas
         when 3
-            buscar_itens
+            ver_tarefas
         when 4
+            buscar_tarefas
+        when 5
+            deletar_tarefas
+        when 6
+            salvar_dados
+        when 0
             puts "Obrigado por usar Diario de estudos."
             puts "Saindo do programa ..."
         else
@@ -28,7 +33,7 @@ def menu_inicial
 end
 
 # Procedimento Cadastrar item para estudar
-def cadastrar_item
+def cadastrar_tarefas
     puts "Digite o Título do seu item de estudo: "
     titulo = gets.chomp()
     categoria = ""
@@ -47,31 +52,69 @@ def cadastrar_item
         end
     end
     $itens_estudo << StudyItem.new(titulo: titulo, categoria: categoria)
-    puts "Estudo cadastrado com sucesso. Pressione qualquer tecla para continuar"
+    puts "Estudo cadastrado com sucesso. Pressione qualquer tecla para continuar."
     gets
 end
 
-# Procedimento Ver todos os itens
-def ver_itens
+# Procedimento Alterar tarefas
+def alterar_tarefas 
     if $itens_estudo == []
         puts "Desculpe, não encontramos itens cadastrados."
-        puts "Pressione qualquer tecla para continuar"
-        gets
+        puts "Pressione qualquer tecla para continuar."
     else
-        $itens_estudo.each{|item|item.mostrar_itens}
-        puts "Pressione qualquer tecla para continuar"
-        gets
+        puts "Escolha uma opção abaixo para alterar: "
+        $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "A fazer"}
+        item_desejado = gets.to_i
+        $itens_estudo.each_with_index{|item,index|item.alterar_status if index == item_desejado}
+        puts "Tarefa #{item_desejado} alterado status para Concluido"
     end
+    gets
 end
 
-# Procedimento Buscar item de estudo
-def buscar_itens
+# Procedimento Ver tarefas
+def ver_tarefas
+    if $itens_estudo == []
+        puts "Desculpe, não encontramos itens cadastrados."
+        puts "Pressione qualquer tecla para continuar."
+    else
+        item_desejado = 0
+        while (item_desejado != 1) || (item_desejado != 2) || (item_desejado != 3) do
+            puts "Escolha uma opção abaixo: \n[1]Ver itens a fazer \n[2]Ver itens concluidos \n [3]Ver todos os itens"
+            item_desejado = gets.to_i
+            case item_desejado
+            when 1
+                $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "A fazer"}
+                puts "Pressione qualquer tecla para continuar."
+            when 2
+                $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "Concluido"}
+                puts "Pressione qualquer tecla para continuar."
+            when 3
+                $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+                puts "Pressione qualquer tecla para continuar."
+            else
+                puts "Erro! Favor digite um tipo valido." 
+            end
+        end
+    end
+    gets
+end
+
+# Procedimento Buscar tarefas de estudo
+def buscar_tarefas
     puts "Digite uma palavra para procurar:"
     busca = gets.chomp().downcase  
     puts "Os resultados encontrados foram:"
-    $itens_estudo.each{|item|item.buscar_itens(busca)}
-    puts "Pressione qualquer tecla para continuar"
+    $itens_estudo.each_with_index{|item,index|item.buscar_itens(busca,index)}
+    puts "Pressione qualquer tecla para continuar."
     gets
+end
+
+def deletar_tarefas
+    puts "Digite o item que deseja deletar:"
+    $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+    gets
+    puts "Tarefa deletada com sucesso."
+    puts "Pressione qualquer tecla para continuar."
 end
 
 # Procedimento Limpar a tela
@@ -84,4 +127,5 @@ def clear_screen
 end
 
 # Executa o procedimento menu inicial
+carregar_dados
 menu_inicial

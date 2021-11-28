@@ -1,6 +1,7 @@
 # Study_diary
 
 Este projeto é um Diario de Estudo desenvolvido em ruby.
+
 Implementados:
 - Criação de estudos
 - Mostrar itens
