@@ -4,7 +4,7 @@ require './save_load.rb'
 require './category.rb'
 
 # Procedimento Menu
-def menu_inicial
+def menu_inicial()
     escolha = ""
     while escolha != 0 do
         clear_screen
@@ -13,17 +13,17 @@ def menu_inicial
         escolha = gets.to_i 
         case escolha
         when 1
-            cadastrar_tarefas
+            cadastrar_tarefas()
         when 2
-            alterar_tarefas
+            alterar_tarefas()
         when 3
-            ver_tarefas
+            ver_tarefas()
         when 4
-            buscar_tarefas
+            buscar_tarefas()
         when 5
-            deletar_tarefas
+            deletar_tarefas()
         when 6
-            salvar_dados
+            salvar_dados()
         when 0
             puts "Obrigado por usar Diario de estudos."
             puts "Saindo do programa ..."
@@ -34,20 +34,16 @@ def menu_inicial
 end
 
 # Procedimento Cadastrar item para estudar
-def cadastrar_tarefas
+def cadastrar_tarefas()
     puts "Digite o Título do seu item de estudo: "
     titulo = gets.chomp()
     categoria = ""
     while categoria == "" do
-        puts "Escolha qual a categoria desejada: \n[1]Ruby \n[2]Rails \n[3]HTML"
+        puts "Escolha qual a categoria desejada: "
+        $categorias.each_with_index{|valor,index|valor.mostrar_categoria(index)}
         categoria_escolha = gets.to_i
-        case categoria_escolha
-        when 1
-            categoria = "Ruby"
-        when 2 
-            categoria = "Rails"
-        when 3
-            categoria = "HTML"
+        if categoria_escolha >= 0 && categoria_escolha < $categorias.length
+            categoria = $categorias[categoria_escolha].categoria
         else
             puts "Erro! Favor digite uma categoria valida." 
         end
@@ -58,7 +54,7 @@ def cadastrar_tarefas
 end
 
 # Procedimento Alterar tarefas
-def alterar_tarefas 
+def alterar_tarefas()
     if $itens_estudo == []
         puts "Desculpe, não encontramos itens cadastrados."
         puts "Pressione qualquer tecla para continuar."
@@ -74,7 +70,7 @@ def alterar_tarefas
 end
 
 # Procedimento Ver tarefas
-def ver_tarefas
+def ver_tarefas()
     if $itens_estudo == []
         puts "Desculpe, não encontramos itens cadastrados."
         puts "Pressione qualquer tecla para continuar."
@@ -92,11 +88,13 @@ def ver_tarefas
     gets
 end
 
-def ver_tarefas_categoria
+# Procedimento Ver tarefas por Categoria
+def ver_tarefas_categoria()
 
 end
 
-def ver_tarefas_status
+# Procedimento Ver tarefas por Status
+def ver_tarefas_status()
     item_desejado = 0
     while item_desejado != 1 && item_desejado != 2 && item_desejado != 3 do
         puts "Escolha uma opção abaixo: \n[1]Ver itens a fazer \n[2]Ver itens concluidos \n[3]Ver todos os itens"
@@ -118,7 +116,7 @@ def ver_tarefas_status
 end
 
 # Procedimento Buscar tarefas de estudo
-def buscar_tarefas
+def buscar_tarefas()
     puts "Digite uma palavra para procurar:"
     busca = gets.chomp().downcase  
     puts "Os resultados encontrados foram:"
@@ -127,7 +125,8 @@ def buscar_tarefas
     gets
 end
 
-def deletar_tarefas
+# Procedimento Deletar tarefas
+def deletar_tarefas()
     if $itens_estudo == []
         puts "Desculpe, não encontramos itens cadastrados."
         puts "Pressione qualquer tecla para continuar."
@@ -148,7 +147,7 @@ def deletar_tarefas
 end
 
 # Procedimento Limpar a tela
-def clear_screen
+def clear_screen()
     if RUBY_PLATFORM =~ /win32|win64|\.NET|windows|cygwin|mingw32/i
        system('cls')
      else
@@ -156,7 +155,9 @@ def clear_screen
     end
 end
 
+# Iniciar dados ao abrir programa
+carregar_dados()
+iniciar_categorias()
+
 # Executa o procedimento menu inicial
-# iniciar_categorias
-carregar_dados
-menu_inicial
+menu_inicial()

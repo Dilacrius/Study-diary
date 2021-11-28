@@ -5,8 +5,8 @@ class Category
         @categoria = categoria
     end    
 
-    def iniciar_categorias
-        $categories << [Rails, Ruby, HTML]
+    def mostrar_categoria(index)
+        puts "[#{index}] #{@categoria}"
     end
 end
 
