@@ -128,11 +128,23 @@ def buscar_tarefas
 end
 
 def deletar_tarefas
-    puts "Digite o item que deseja deletar:"
-    $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+    if $itens_estudo == []
+        puts "Desculpe, não encontramos itens cadastrados."
+        puts "Pressione qualquer tecla para continuar."
+    else
+        puts "Digite o item que deseja deletar:"
+        $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+        escolha = gets.to_i
+        if escolha >= 0 && escolha < $itens_estudo.length()
+            $itens_estudo.delete_at(escolha)
+            puts "Tarefa deletada com sucesso."
+            puts "Pressione qualquer tecla para continuar."
+        else
+            puts "Erro! Codigo Invalido."
+            puts "Pressione qualquer tecla para continuar."
+        end
+    end
     gets
-    puts "Tarefa deletada com sucesso."
-    puts "Pressione qualquer tecla para continuar."
 end
 
 # Procedimento Limpar a tela

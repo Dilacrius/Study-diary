@@ -8,9 +8,9 @@ Implementados:
 - Buscar tarefas por nome
 - Buscar por status
 - Marcar um item como concluido
+- Excluir tarefas
 
 Implementação futura:
-- Excluir tarefas
 - Salvar dados 
 - Buscar por categoria
 - Adicionar descrição tarefa e permitir busca por descrição
