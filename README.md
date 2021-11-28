@@ -1,4 +1,4 @@
-# Study_diary
+# Study-diary-in-ruby
 
 Este projeto é um Diario de Estudo desenvolvido em ruby.
 
