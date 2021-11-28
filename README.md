@@ -3,13 +3,14 @@
 Este projeto é um Diario de Estudo desenvolvido em ruby.
 
 Implementados:
-- Criação de estudos
-- Mostrar itens
-- Buscar itens
+- Criação de tarefas
+- Mostrar todas as tarefas
+- Buscar tarefas por nome
+- Buscar por status
+- Marcar um item como concluido
 
 Implementação futura:
-- Escluir estudos
-- Salvar dados em banco de dados
-- Listar por categoria
-- Marcar um item como concluido
-- Apagar um item
+- Excluir tarefas
+- Salvar dados 
+- Buscar por categoria
+- Adicionar descrição tarefa e permitir busca por descrição

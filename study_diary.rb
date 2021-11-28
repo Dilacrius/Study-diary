@@ -1,6 +1,7 @@
 # Diario de Estudo em Ruby
 require './study_item.rb'
 require './save_load.rb'
+require './category.rb'
 
 # Procedimento Menu
 def menu_inicial
@@ -67,6 +68,7 @@ def alterar_tarefas
         item_desejado = gets.to_i
         $itens_estudo.each_with_index{|item,index|item.alterar_status if index == item_desejado}
         puts "Tarefa #{item_desejado} alterado status para Concluido"
+        puts "Pressione qualquer tecla para continuar."
     end
     gets
 end
@@ -77,26 +79,42 @@ def ver_tarefas
         puts "Desculpe, não encontramos itens cadastrados."
         puts "Pressione qualquer tecla para continuar."
     else
-        item_desejado = 0
-        while (item_desejado != 1) || (item_desejado != 2) || (item_desejado != 3) do
-            puts "Escolha uma opção abaixo: \n[1]Ver itens a fazer \n[2]Ver itens concluidos \n [3]Ver todos os itens"
-            item_desejado = gets.to_i
-            case item_desejado
-            when 1
-                $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "A fazer"}
-                puts "Pressione qualquer tecla para continuar."
-            when 2
-                $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "Concluido"}
-                puts "Pressione qualquer tecla para continuar."
-            when 3
-                $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
-                puts "Pressione qualquer tecla para continuar."
-            else
-                puts "Erro! Favor digite um tipo valido." 
-            end
+        puts "Escolha a opção desejada: \n[1]Busca por categoria \n[2]Busca por status da tarefa"
+        escolha = gets.to_i
+        case escolha
+        when 1
+            ver_tarefas_categoria
+        when 2
+            ver_tarefas_status
+        else
         end
     end
     gets
+end
+
+def ver_tarefas_categoria
+
+end
+
+def ver_tarefas_status
+    item_desejado = 0
+    while item_desejado != 1 && item_desejado != 2 && item_desejado != 3 do
+        puts "Escolha uma opção abaixo: \n[1]Ver itens a fazer \n[2]Ver itens concluidos \n[3]Ver todos os itens"
+        item_desejado = gets.to_i
+        case item_desejado
+        when 1
+            $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "A fazer"}
+            puts "Pressione qualquer tecla para continuar."
+        when 2
+            $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index) if item.status == "Concluido"}
+            puts "Pressione qualquer tecla para continuar."
+        when 3
+            $itens_estudo.each_with_index{|item,index|item.mostrar_itens(index)}
+            puts "Pressione qualquer tecla para continuar."
+        else
+            puts "Erro! Favor digite um tipo valido." 
+        end
+    end
 end
 
 # Procedimento Buscar tarefas de estudo
@@ -127,5 +145,6 @@ def clear_screen
 end
 
 # Executa o procedimento menu inicial
+# iniciar_categorias
 carregar_dados
 menu_inicial
