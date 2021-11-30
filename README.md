@@ -13,6 +13,7 @@ Implementados:
 - Busca por descrição
 - Marcar um item como concluido
 - Excluir tarefas
+- Salvar dados no SQLite
 
 Implementação futura:
-- Salvar dados 
+- Controle de erro
