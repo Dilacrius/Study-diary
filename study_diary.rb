@@ -10,7 +10,7 @@ def carregar_dados()
     else
         db = SQLite3::Database.open 'banco.db'
         db.execute "CREATE TABLE IF NOT EXISTS category(id integer primary key autoincrement, categoria varchar(255))"
-        db.execute "CREATE TABLE IF NOT EXISTS study_item(id integer primary key autoincrement, titulo varchar(255), categoria varchar(255), status varchar(255), descricao varchar(255))"
+        db.execute "CREATE TABLE IF NOT EXISTS study_item(id integer primary key autoincrement, titulo varchar(255), categoria integer, status varchar(255), descricao varchar(255), FOREIGN KEY (categoria) REFERENCES category(id))"
         Category.create("Ruby")
         Category.create("Rails")
         Category.create("HTML")
